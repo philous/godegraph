@@ -235,7 +235,8 @@ const htmlTemplate = `
     </div>
     <div id="tooltip" class="tooltip" style="display: none;"></div>
     <script>
-        const data = {{.}};
+        // Parse the JSON data from the template
+        const data = JSON.parse({{.}});
         let showIncoming = true;
         let showOutgoing = true;
         let showCrossModuleOnly = false;
@@ -913,7 +914,7 @@ func extractPackageDependencies() (*Graph, error) {
 func main() {
 	var ignoredPathsFlag string
 	flag.StringVar(&ignoredPathsFlag, "ignore", "", "Comma-separated list of paths to ignore (relative to root directory)")
-	
+
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] [working_directory]\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nGenerates a dependency graph visualization for a Go project.\n")
@@ -966,7 +967,7 @@ func main() {
 
 	// Create template
 	tmpl := template.Must(template.New("graph").Parse(htmlTemplate))
-	
+
 	// Create output file in the working directory
 	outputPath := filepath.Join(absWorkDir, "dependency_graph.html")
 	f, err := os.Create(outputPath)
